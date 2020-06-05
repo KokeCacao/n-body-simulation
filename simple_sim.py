@@ -153,26 +153,21 @@ class AnimatedScatter(object):
 
         self.axtime = plt.axes([0.25, 0.1, 0.65, 0.03])
         self.stime = Slider(self.axtime, 'Time', 0.0, 10.0, valinit=0.0)
-
-        self.resetax = plt.axes([0.8, 0.025, 0.1, 0.04])
-        self.button = Button(self.resetax, 'Reset', hovercolor='0.975')
-
-        #Routines to reset and update sliding bar
-        def reset(event):
-            self.stime.reset()
-            self.x_ = []
-            self.y_ = []
-            self.z_ = []
-
         def update(val):
             if val == 0: return
             print("Jumping e^{}={} frames".format(int(val), int(math.e**val)))
             for v in range(int(math.e**val)):
                 x_i, y_i, z_i, u_i, v_i, w_i, x_, y_, z_  = next(self.stream)
             self.stime.reset()
-
-        #Bind sliding bar and reset button  
         self.stime.on_changed(update)
+
+        self.resetax = plt.axes([0.8, 0.025, 0.1, 0.04])
+        self.button = Button(self.resetax, 'Reset', hovercolor='0.975')
+        def reset(event):
+            self.stime.reset()
+            self.x_ = []
+            self.y_ = []
+            self.z_ = []
         self.button.on_clicked(reset)
 
         FLOOR = self.axis_range[0]
